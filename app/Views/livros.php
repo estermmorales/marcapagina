@@ -31,9 +31,9 @@
                         <th scope="col" class="px-6 py-3"></th>
                     </tr>
                 </thead>
-                <tbody class="bg-white border-b  hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-50 text-gray-600">
+                <tbody class="bg-white border-b cursor-pointer text-gray-600">
                     <?php foreach ($livros as $livro): ?>
-                    <tr>
+                    <tr class="hover:bg-gray-100">
                         <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap"><?php echo $livro->Titulo; ?></th>
                         <td class="px-6 py-4"><?php echo $livro->Autor; ?></td>
                         <td class="px-6 py-4"><?php echo $livro->Genero; ?></td>
@@ -42,7 +42,7 @@
                         <td class="px-6 py-4 text-center"><?php echo $livro->PaginaAtual; ?></td>
                         <td class="px-6 py-4 text-right">
                             <!-- Circle -->
-                            <div class="relative inline-flex items-center justify-center">
+                            <div class="relative inline-flex items-center justify-center progress-container">
                                 <!-- Building a Progress Ring: https://css-tricks.com/building-progress-ring-quickly/ -->
                                 <svg class="w-20 h-20">
                                     <circle class="stroke-current text-gray-300" stroke-width="5" fill="transparent" r="30" cx="40" cy="40" />
@@ -52,7 +52,7 @@
                                         :stroke-dashoffset="`${100 - currentPercent}`"
                                         fill="transparent" r="30" cx="40" cy="40" data-percent="<?php echo $livro->PorcentagemLeitura; ?>"></circle>
                                 </svg>
-                                <span class="absolute text-xl text-gray-600" id="percentDisplay">0%</span>
+                                <span class="absolute text-xl text-gray-600 percentDisplay">0%</span>
                             </div>
                         </td>
                     </tr>
@@ -147,9 +147,7 @@
     </div> 
     <script>
         const add_button = document.querySelector('.add-button');
-        console.log(add_button);
         const add_modal = document.getElementById('add-modal');
-        console.log(add_modal);
         const close_modal = document.querySelector('.close-modal');
 
         add_button.addEventListener("click", () => {
@@ -162,28 +160,29 @@
             add_modal.classList.add('hidden');
         });
         
-        
-        let currentPercent = 0;
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.progress-container').forEach((container) => {
+                let currentPercent = 0;
+                const circle = container.querySelector('.progress-ring');
+                const targetPercent = circle.dataset.percent;
+                const percentDisplay = container.querySelector('.percentDisplay');
 
-        const circle = document.querySelector('.progress-ring');
-        const targetPercent = circle.dataset.percent; 
-        console.log(targetPercent)
-        const percentDisplay = document.getElementById('percentDisplay');
+                function updateProgress() {
+                    percentDisplay.innerText = `${currentPercent}%`;
 
-        function updateProgress() {
-            percentDisplay.innerText = `${currentPercent}%`;
+                    if (currentPercent < targetPercent) {
+                        const remainingPercent = targetPercent - currentPercent;
+                        const increment = Math.min(remainingPercent, 1); 
+                        currentPercent += increment;
 
-            if (currentPercent < targetPercent) {
-                const remainingPercent = targetPercent - currentPercent;
-                const increment = Math.min(remainingPercent, 1); // Ajuste o incremento conforme necessário
-                currentPercent += increment;
-
-                circle.style.strokeDasharray = `${Math.max(0, currentPercent)} ${Math.max(0, 100 - currentPercent)}`;
-                circle.style.strokeDashoffset = `${100 - currentPercent}`;
-                setTimeout(updateProgress, 20); // Ajuste o tempo de espera conforme necessário
-            }
-        }
-        updateProgress(); // Inicia a animação
+                        circle.style.strokeDasharray = `${Math.max(0, currentPercent)} ${Math.max(0, 100 - currentPercent)}`;
+                        circle.style.strokeDashoffset = `${100 - currentPercent}`;
+                        setTimeout(updateProgress, 20); 
+                    }
+                }
+                updateProgress();
+            });
+        });
     </script>
 </body>
 
