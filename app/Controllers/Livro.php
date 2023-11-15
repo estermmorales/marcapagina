@@ -53,7 +53,6 @@ class Livro extends Controller
             'DataCadastro' => date('Y-m-d H:i:s'),
         ];
 
-        
         $this->livrosModel->insert($dadosLivro);
         return redirect()->to(base_url('/'));
     }
