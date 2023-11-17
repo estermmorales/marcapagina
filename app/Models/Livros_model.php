@@ -23,4 +23,10 @@ class Livros_model extends Model {
     {
         return $this->findAll();
     }
+
+    public function obter_livro_por_id($id) 
+    {
+        $query = $this->where('ID', $id)->get();
+        return $query->getRowArray();
+    }
 }

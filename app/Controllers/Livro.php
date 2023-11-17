@@ -57,7 +57,13 @@ class Livro extends Controller
         return redirect()->to(base_url('/'));
     }
 
-    public function edit($param)
+    public function get_by_id($id) 
+    {
+        $livro_details = $this->livrosModel->obter_livro_por_id($id);
+        return $this->response->setJSON($livro_details);
+    }
+
+    public function edit($id)
     {
         redirect()->route('index');
     }
