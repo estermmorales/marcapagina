@@ -19,14 +19,26 @@ class Livros_model extends Model {
         'PorcentagemLeitura',
     ];
 
-    public function obter_livros()
+    public function obter_livros($perPage = 4)
     {
-        return $this->findAll();
+        return $this->paginate($perPage);
     }
 
     public function obter_livro_por_id($id) 
     {
         $query = $this->where('ID', $id)->get();
         return $query->getRowArray();
+    }
+
+    public function atualizar_livro($id, $data)
+    {
+        $this->set($data);
+        $this->where('ID', $id);
+        $this->update();
+    }
+
+    public function excluir_livro($id)
+    {
+        return $this->delete($id);
     }
 }

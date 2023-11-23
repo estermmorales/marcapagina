@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use App\Models\Livros_model;
+use App\Libraries\MyPagerRenderer;
 
 
 class Livro extends Controller
@@ -16,9 +17,12 @@ class Livro extends Controller
     }
     public function index(): string
     {
-        $dados['livros'] = $this->livrosModel->obter_livros();
 
-        return view('livros', $dados);
+        $data['livros'] = $this->livrosModel->paginate(4);
+
+        $data['pager'] = $this->livrosModel->pager;
+
+        return view('livros', $data);
     }
 
     public function add() 
@@ -63,13 +67,42 @@ class Livro extends Controller
         return $this->response->setJSON($livro_details);
     }
 
-    public function edit($id)
+    public function edit()
     {
-        redirect()->route('index');
+        if ($this->request->getMethod() === 'post') {
+
+            $paginas_total = $this->request->getPost('total_paginas');
+            $pagina_atual = $this->request->getPost('pagina_atual');
+            if ($pagina_atual != 0 || $paginas_total != 0)
+            {
+                $porcentagem = round(($pagina_atual / $paginas_total) * 100);
+            }
+            else
+            {
+                $porcentagem = 0;
+            }
+           
+            $livroId = (int)$this->request->getPost('id'); 
+            $data = [
+                'Titulo' => $this->request->getPost('titulo'),
+                'Autor' => $this->request->getPost('autor'),
+                'Genero' => $this->request->getPost('genero'),
+                'AnoPublicacao' => $this->request->getPost('ano'),
+                'TotalPaginas' => $this->request->getPost('total_paginas'),
+                'PaginaAtual' => $this->request->getPost('pagina_atual'),
+                'StatusLeitura' => $this->request->getPost('status'),
+                'PorcentagemLeitura' => $porcentagem
+            ];
+    
+            $this->livrosModel->atualizar_livro($livroId, $data);
+            return redirect()->to(base_url('/'));
+        }
     }
 
-    public function delete($param)
+    public function delete()
     {
-        redirect()->route('index');
+        $livroId = (int)$this->request->getPost('id'); 
+        $this->livrosModel->excluir_livro($livroId);
+        return redirect()->to('/')->with('success', 'Livro excluído com sucesso!');
     }
 }

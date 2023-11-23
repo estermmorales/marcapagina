@@ -16,25 +16,25 @@
             <span class="text-4xl font-semibold relative text-slate-50 p-1 underline decoration-indigo-500"><a href="/">readtrackr</a></span>
         </div> -->
         <div class=" my-4 mx-6">
-            <img src="<?= base_url() ?>/assets/readtrackr.png" alt="" width="300">
+            <a href="#"><img src="<?= base_url() ?>/assets/readtrackr.png" alt="" width="300"></a>
         </div>
     </header>
     <main class="flex justify-center py-3">
-        <div class="relative overflow-x-auto shadow-md  border ">
+        <div class="relative overflow-x-auto shadow-md  border rounded">
             <div class="flex justify-between bg-white py-3 px-6">
-                <div class="bg-white py-3 px-6">
+                <div class="bg-white py-3 px-3">
                     <h1 class="text-4xl font-semibold text-gray-700">LEITURAS</h1>
                 </div>
                 <div class="flex items-center gap-4">
                 <form>   
-                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only ">Search</label>
+                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only ">Pesquisa</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                             </svg>
                         </div>
-                        <input type="search" id="default-search" class="block w-full p-2 ps-10 text-sm text-gray-900 border rounded bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Pesquisar..." required>
+                        <input type="search" id="default-search" class="block w-full p-2 ps-10 text-sm text-gray-900 border rounded bg-gray-50" placeholder="Pesquisar..." required>
                     </div>
                 </form>
                 <button class="inline-flex items-center px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-800 text-sm font-medium rounded border">
@@ -96,21 +96,7 @@
         </div>
     </main>
     <div class="flex justify-center gap-x-1">
-        <nav class="flex justify-center items-center gap-x-1">
-            <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none">
-                <svg class="flex-shrink-0 w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                <span aria-hidden="true" class="sr-only">Previous</span>
-            </button>
-            <div class="flex items-center gap-x-1">
-                <button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center border bg-gray-50 border-gray-200 text-gray-800 py-2 px-3 text-sm rounded focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none" aria-current="page">1</button>
-                <button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center border border-transparent text-gray-800 hover:bg-gray-100 py-2 px-3 text-sm rounded focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none">2</button>
-                <button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center border border-transparent text-gray-800 hover:bg-gray-100 py-2 px-3 text-sm rounded focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none">3</button>
-            </div>
-            <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none">
-                <span aria-hidden="true" class="sr-only">Next</span>
-                <svg class="flex-shrink-0 w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-        </nav>                    
+        <?= $pager->links('default', 'tailwind_pagination') ?>                    
     </div>
     <!-- modals -->
     <?php include('_add_modal.php'); ?>
@@ -122,6 +108,9 @@
         const books = document.querySelectorAll('.book');
         const edit_modal = document.getElementById('edit-modal');
         const edit_form = document.getElementById('edit-form');
+        const confirm_button = document.querySelector('.confirm-button');
+        const confirm_modal = document.getElementById('confirm-modal');
+        const confirm_form = document.getElementById('confirm-form');
 
         add_button.addEventListener("click", () => {
             add_modal.classList.remove('hidden');
@@ -142,6 +131,7 @@
                 const id = book.dataset.id;
             get_book_by_id(id).then(bookDetails => {
                 const fields = {
+                    "#id": 'ID',
                     "#titulo": 'Titulo',
                     "#autor": "Autor",
                     "#genero": "Genero",
@@ -169,6 +159,15 @@
                 return response.json();
             });
         }
+
+        confirm_button.addEventListener("click", () => {
+            confirm_modal.classList.remove('hidden');
+            confirm_modal.classList.add('flex');
+            id =edit_form.querySelector("#id").value
+            confirm_form.querySelector("#id").value = id
+        });
+
+
 
         //progress ring
         document.addEventListener("DOMContentLoaded", function() {
