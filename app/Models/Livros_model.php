@@ -21,7 +21,7 @@ class Livros_model extends Model {
 
     public function obter_livros($perPage = 4)
     {
-        return $this->paginate($perPage);
+        return $this->orderBy('DataCadastro', 'DESC')->paginate($perPage);
     }
 
     public function obter_livro_por_id($id) 

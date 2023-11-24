@@ -18,7 +18,7 @@ class Livro extends Controller
     public function index(): string
     {
 
-        $data['livros'] = $this->livrosModel->paginate(4);
+        $data['livros'] = $this->livrosModel->orderBy('DataCadastro', 'DESC')->paginate(3);
 
         $data['pager'] = $this->livrosModel->pager;
 

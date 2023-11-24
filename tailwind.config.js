@@ -5,7 +5,10 @@ module.exports = {
     extend: {
       fontFamily: {
         body: ['Mona Sans']
-      }
+      },
+      width: {
+        '950': '959px',
+      },
     },
   },
   plugins: [],
