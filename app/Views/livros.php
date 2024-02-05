@@ -6,15 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>readtrackr - leituras</title>
     <link rel="stylesheet" href="<?= base_url() ?>/css/style.css">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,0" />
 </head>
 
 <body class="font-body absolute inset-0 h-full w-full bg-gray-50 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
     <header>
-        <!-- <div>
-            <span class="text-4xl font-semibold relative text-slate-50 p-1 underline decoration-indigo-500"><a href="/">readtrackr</a></span>
-        </div> -->
         <div class=" my-4 mx-6">
             <a href="#"><img src="<?= base_url() ?>/assets/readtrackr.png" alt="" width="250"></a>
         </div>
